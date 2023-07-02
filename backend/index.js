@@ -10,6 +10,9 @@ import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
 
+import User from "./models/User.js";
+import { dataUser } from "./data/index.js";
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -30,7 +33,8 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() =>
-    app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
-  )
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
+    User.insertMany(dataUser);
+  })
   .catch((error) => console.log(error.message));
