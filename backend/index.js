@@ -35,6 +35,7 @@ mongoose
   })
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
-    User.insertMany(dataUser);
+    /* MOCKDATA ENVIADA PARA O SERVIDOR MONGODB, RODAR UMA VEZ SÓ */
+    // User.insertMany(dataUser);
   })
   .catch((error) => console.log(error.message));

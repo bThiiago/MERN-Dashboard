@@ -11,7 +11,6 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import {
@@ -30,7 +29,7 @@ import {
   TrendingUpOutlined,
   PieChartOutlined,
 } from "@mui/icons-material";
-import FlexBetween from "components/FlexBetween";
+import FlexBetween from "./FlexBetween";
 import profileImage from "assets/profile.png";
 
 const navItems = [
@@ -93,19 +92,19 @@ const navItems = [
 ];
 
 const Sidebar = ({
-  isNonMobile,
+  user,
   drawerWidth,
   isSidebarOpen,
   setIsSidebarOpen,
+  isNonMobile,
 }) => {
   const { pathname } = useLocation();
-  const [activeRoute, setActiveRoute] = useState(pathname);
-
+  const [active, setActive] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();
 
   useEffect(() => {
-    setActiveRoute(pathname);
+    setActive(pathname.substring(1));
   }, [pathname]);
 
   return (
@@ -115,15 +114,15 @@ const Sidebar = ({
           open={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           variant="persistent"
-          anchor="left" 
+          anchor="left"
           sx={{
             width: drawerWidth,
             "& .MuiDrawer-paper": {
-              width: drawerWidth,
-              boxSizing: "border-box",
               color: theme.palette.secondary[200],
               backgroundColor: theme.palette.background.alt,
+              boxSixing: "border-box",
               borderWidth: isNonMobile ? 0 : "2px",
+              width: drawerWidth,
             },
           }}
         >
@@ -136,7 +135,7 @@ const Sidebar = ({
                   </Typography>
                 </Box>
                 {!isNonMobile && (
-                  <IconButton onClick={() => setIsSidebarOpen(false)}>
+                  <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                     <ChevronLeft />
                   </IconButton>
                 )}
@@ -158,15 +157,15 @@ const Sidebar = ({
                     <ListItemButton
                       onClick={() => {
                         navigate(`/${lcText}`);
-                        setActiveRoute(lcText);
+                        setActive(lcText);
                       }}
                       sx={{
                         backgroundColor:
-                          activeRoute === lcText
+                          active === lcText
                             ? theme.palette.secondary[300]
                             : "transparent",
                         color:
-                          activeRoute === lcText
+                          active === lcText
                             ? theme.palette.primary[600]
                             : theme.palette.secondary[100],
                       }}
@@ -175,7 +174,7 @@ const Sidebar = ({
                         sx={{
                           ml: "2rem",
                           color:
-                            activeRoute === lcText
+                            active === lcText
                               ? theme.palette.primary[600]
                               : theme.palette.secondary[200],
                         }}
@@ -183,7 +182,7 @@ const Sidebar = ({
                         {icon}
                       </ListItemIcon>
                       <ListItemText primary={text} />
-                      {activeRoute === lcText && (
+                      {active === lcText && (
                         <ChevronRightOutlined sx={{ ml: "auto" }} />
                       )}
                     </ListItemButton>
@@ -191,6 +190,46 @@ const Sidebar = ({
                 );
               })}
             </List>
+          </Box>
+
+          <Box>
+            <Divider />
+            <FlexBetween
+              textTransform="none"
+              gap="1rem"
+              m="1rem 2rem 2rem 2rem"
+            >
+              <Box
+                component="img"
+                alt="profile"
+                src={profileImage}
+                height="40px"
+                width="40px"
+                borderRadius="50%"
+                sx={{ objectFit: "cover" }}
+              />
+              <Box textAlign="left">
+                <Typography
+                  fontWeight="bold"
+                  fontSize="0.9rem"
+                  sx={{ color: theme.palette.secondary[100] }}
+                >
+                  {user.name}
+                </Typography>
+                <Typography
+                  fontSize="0.8rem"
+                  sx={{ color: theme.palette.secondary[200] }}
+                >
+                  {user.occupation}
+                </Typography>
+              </Box>
+              <SettingsOutlined
+                sx={{
+                  color: theme.palette.secondary[300],
+                  fontSize: "25px ",
+                }}
+              />
+            </FlexBetween>
           </Box>
         </Drawer>
       )}
