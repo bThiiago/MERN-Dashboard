@@ -14,8 +14,13 @@ const store = configureStore({
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+    process.env.NODE_ENV === "development"
+      ? getDefaultMiddleware({
+          serializableCheck: false,
+        }).concat(api.middleware)
+      : getDefaultMiddleware().concat(api.middleware),
 });
+
 setupListeners(store.dispatch);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
