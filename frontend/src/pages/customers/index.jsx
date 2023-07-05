@@ -85,7 +85,9 @@ const Customers = () => {
           getRowId={(row) => row._id}
           rows={data || []}
           columns={columns}
-          slots={{ toolbar: GridToolbar }}
+          components={{
+            Toolbar: GridToolbar,
+          }}
         />
       </Box>
     </Box>
